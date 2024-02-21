@@ -1,20 +1,64 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
+import { StartGameScreen } from './screens/StartGameScreen';
+import { useState } from 'react';
+import { GameScreen } from './screens/GameScreen';
+import { GameOverScreen } from './screens/GameOverScreen';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+	const [userNumber, setUserNumber] = useState<number | null>();
+	const [gameComplete, setGameComplete] = useState(false);
+	const [restartGame, setRestartGame] = useState(false);
+	const [amountOfGuesses, setAmountOfGuesses] = useState(1);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+	const pickedNumberHandler = (pickedNumber: number) => {
+		setUserNumber(pickedNumber);
+		setGameComplete(false);
+		setRestartGame(false);
+	};
+
+	let screen = (
+		<StartGameScreen
+			onConfirmNumber={(number) => pickedNumberHandler(number)}
+		/>
+	);
+
+	if (userNumber) {
+		screen = (
+			<GameScreen
+				amountOfGuesses={(amountOfGuesses: number) =>
+					setAmountOfGuesses(amountOfGuesses)
+				}
+				onGameComplete={() => setGameComplete(true)}
+				pickedNumber={userNumber}
+			/>
+		);
+	}
+
+	if (gameComplete && userNumber) {
+		screen = (
+			<GameOverScreen
+				userNumber={userNumber}
+				amountOfGuesses={amountOfGuesses}
+				restartGame={(restartGame) => setRestartGame(restartGame)}
+			/>
+		);
+	}
+
+	if (restartGame) {
+		screen = (
+			<StartGameScreen
+				onConfirmNumber={(number) => pickedNumberHandler(number)}
+			/>
+		);
+	}
+
+	return (
+		<SafeAreaView
+			style={{
+				flex: 1,
+			}}
+		>
+			{screen}
+		</SafeAreaView>
+	);
+}
