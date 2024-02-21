@@ -14,6 +14,7 @@ export const StartGameScreen = ({ onConfirmNumber }: StartGameScreenProps) => {
 	};
 
 	const resetTextInputValue = () => {
+		console.log('reset');
 		setTextInputValue('');
 	};
 
@@ -25,7 +26,7 @@ export const StartGameScreen = ({ onConfirmNumber }: StartGameScreenProps) => {
 				{
 					text: 'Ok',
 					style: 'destructive',
-					onPress: () => resetTextInputValue,
+					onPress: () => resetTextInputValue(),
 				},
 			]);
 			return;

@@ -26,7 +26,7 @@ export const GameScreen = ({
 		}
 
 		if (computerGuess === pickedNumber) {
-			runGuessedCorrectlyAlert();
+			onGameComplete(true);
 		}
 
 		let lieDetected =
@@ -100,13 +100,6 @@ export const GameScreen = ({
 		);
 	};
 
-	console.log('computer guess', computerGuess);
-	console.log('pickedNumber', pickedNumber);
-
-	if (computerGuess === pickedNumber) {
-		runGuessedCorrectlyAlert();
-	}
-	console.log('guesses', computerGuesses);
 	return (
 		<View style={{ flex: 1 }}>
 			<Text style={{ textAlign: 'center', fontSize: 24 }}>
@@ -157,7 +150,7 @@ export const GameScreen = ({
 					}}
 				>
 					<FlatList
-						data={computerGuesses.reverse()}
+						data={computerGuesses}
 						renderItem={({ item, index }) => (
 							<Text>
 								#{index + 1} Guessed: {item}
